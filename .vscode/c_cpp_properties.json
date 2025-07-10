@@ -1,0 +1,18 @@
+{
+	"configurations": [
+	  {
+		"name": "macOS",
+		"includePath": [
+		  "${workspaceFolder}/**",
+		  "/Library/Developer/CommandLineTools/usr/include",
+		  "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"
+		],
+		"defines": [],
+		"compilerPath": "/usr/bin/clang",
+		"cStandard": "c11",
+		"intelliSenseMode": "macos-clang-x64"
+	  }
+	],
+	"version": 4
+  }
+  
