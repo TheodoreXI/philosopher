@@ -1,5 +1,0 @@
-➜  philo2 git:(master) ✗ ./philo 01 120 60 60
-0 1 has taken a fork
-121 1 died deadlock happens
-
-./philo 10  500 100 100

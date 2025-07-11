@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 13:58:15 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/10 19:15:36 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/11 17:04:15 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@
 
 typedef struct s_dt
 {
-	pthread_mutex_t	l_mutex;
-	pthread_mutex_t	r_mutex;
 	long			t_die;
 	long			t_eat;
 	long			t_sleep;
