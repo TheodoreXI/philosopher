@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:04 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/11 15:06:35 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/11 16:07:43 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,31 @@ void	*monitor(void *arg)
 	return (NULL);
 }
 
+void	*ft_sleep(long time_to_sleep, t_dt *data)
+{
+	long	begin;
+	
+	begin = ft_time();
+	while (time_to_sleep > (ft_time() - begin) * 1000)
+	{
+		pthread_mutex_lock(&data->p);
+		if (data->dead)
+			return (pthread_mutex_unlock(&data->p), NULL);
+		pthread_mutex_unlock(&data->p);
+		usleep(100);
+	}
+	return (NULL);
+}
+
 void	*start_routine(void *arg)
 {
 	t_ph	*philo;
 	
 	philo = (t_ph *)arg;
 	if (philo->id % 2 == 0)
-		usleep (philo->data->t_eat * 1000);
+	{
+		ft_sleep(philo->data->t_eat * 1000, philo->data);
+	}
 	while (1)
 	{
 		pthread_mutex_lock(&philo->data->c);
@@ -110,20 +128,22 @@ void	*start_routine(void *arg)
 		ft_print_mutex(1, philo);
 		pthread_mutex_lock(philo->right_fork);
 		ft_print_mutex(1, philo);
-		usleep(philo->data->t_eat * 1000);
 		ft_print_mutex(2, philo);
+		ft_sleep(philo->data->t_eat * 1000, philo->data);
+		// usleep(philo->data->t_eat * 1000);
 		ft_get_last_meal(philo);
 		pthread_mutex_lock(&philo->data->c);
 		if (philo->data->dead)
-			return (pthread_mutex_unlock(&philo->data->c), pthread_mutex_unlock(&philo->data->t), NULL);
+			return (pthread_mutex_unlock(&philo->data->c), NULL);
 		pthread_mutex_unlock(&philo->data->c);
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
 		ft_print_mutex(3, philo);
-		usleep(philo->data->t_sleep * 1000);
+		ft_sleep(philo->data->t_sleep * 1000, philo->data);
+		// usleep(philo->data->t_sleep * 1000);
 		pthread_mutex_lock(&philo->data->c);
 		if (philo->data->dead)
-			return (pthread_mutex_unlock(&philo->data->c), pthread_mutex_unlock(&philo->data->t), NULL);
+			return (pthread_mutex_unlock(&philo->data->c), NULL);
 		pthread_mutex_unlock(&philo->data->c);
 		ft_print_mutex(4, philo);
 		// pthread_mutex_unlock(&philo->data->t);
