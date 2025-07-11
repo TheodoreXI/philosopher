@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:04 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/10 21:00:37 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/11 15:06:35 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,25 @@ void	*start_routine(void *arg)
 		pthread_mutex_unlock(&philo->data->c);
 		ft_print_mutex(4, philo);
 		// pthread_mutex_unlock(&philo->data->t);
+	}
+}
+
+void	*one_thread_routine(void *arg)
+{
+	t_ph	*philo;
+
+	philo = (t_ph *)arg;
+	while (1)
+	{
+		pthread_mutex_lock(philo->left_fork);
+		ft_print_mutex(1, philo);
+		// ft_sleep(philo->data->t_die * 1000, philo->data);
+		usleep(philo->data->t_die * 1000);
+		pthread_mutex_lock(&philo->data->c);
+		if (philo->data->dead)
+			return (NULL);
+		pthread_mutex_unlock(&philo->data->c);
+		pthread_mutex_unlock(philo->left_fork);
 	}
 }
 
@@ -259,11 +278,19 @@ int	ft_scan_input(t_ph **philo, char **argv, int num, t_mt **mutex)
 	if (ft_mutex_initializer(mutex, num))
 		return (ft_mlx_destroyer(mutex, num, philo[i]->data), 1);
 	ft_m_philo(philo, mutex);
-	while (i < num)
+	if (num <= 1)
 	{
-		if (pthread_create(&philo[i]->thread, NULL, start_routine, (void *) philo[i]))
+		if (pthread_create(&philo[i]->thread, NULL, one_thread_routine, (void *) philo[i]))
 			return (1);
-		i++;
+	}
+	else
+	{
+		while (i < num)
+		{
+			if (pthread_create(&philo[i]->thread, NULL, start_routine, (void *) philo[i]))
+				return (1);
+			i++;
+		}
 	}
 	pthread_create(&monitor_thread, NULL, monitor, (void *) philo[0]->data);
 	i = 0;
