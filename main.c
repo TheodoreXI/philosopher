@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:04 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/13 17:52:04 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/13 17:55:36 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,10 @@ void	ft_get_last_meal(t_ph *philo)
 {
 	pthread_mutex_lock(&philo->data->t);
 	philo->l_meal = ft_time();
-	philo->count_meal += 1;
 	pthread_mutex_unlock(&philo->data->t);
+	pthread_mutex_lock(&philo->data->p);
+	philo->count_meal += 1;
+	pthread_mutex_unlock(&philo->data->p);
 }
 
 int	ft_meal_check(t_ph **philo, t_dt *data)
@@ -83,10 +85,10 @@ int	ft_meal_check(t_ph **philo, t_dt *data)
 	while (philo[i])
 	{
 
-		pthread_mutex_lock(&data->t);
+		pthread_mutex_lock(&data->p);
 		if (data->t_num_eat <= philo[i]->count_meal)
 			check++;
-		pthread_mutex_unlock(&data->t);
+		pthread_mutex_unlock(&data->p);
 		i++;
 	}
 	if (check == data->num)
