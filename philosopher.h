@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 13:58:15 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/11 17:04:15 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/13 17:48:53 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,12 @@ typedef struct s_dt
 	long			t_num_eat;
 	long			start;
 	int				dead;
+	int				end_sim;
+	int				num;
 	pthread_mutex_t	p;
 	pthread_mutex_t	c;
 	pthread_mutex_t t;
+	// pthread_mutex_t eat_finish;
 	struct s_ph		**philo;
 } t_dt;
 
@@ -42,6 +45,7 @@ typedef struct s_ph
 {
 	int				id;
 	long			l_meal;
+	int				count_meal;
 	pthread_t		thread;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
