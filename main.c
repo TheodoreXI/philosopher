@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:04 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 09:05:53 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 12:05:12 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,11 @@ int	check_input(char **argv, int argc)
 void	ft_print_mutex(int check, t_ph *philo)
 {
 	pthread_mutex_lock(&philo->data->c);
+	if (philo->data->dead)
+	{
+		pthread_mutex_unlock(&philo->data->c);
+		return ;
+	}
 	if (check == 1 && !philo->data->dead)
 		printf("%ld %d has taken a fork\n", (ft_time() - philo->data->start), philo->id);
 	else if (check == 2 && !philo->data->dead)
@@ -74,8 +79,6 @@ void	ft_print_mutex(int check, t_ph *philo)
 		printf("%ld %d is sleeping\n", (ft_time() - philo->data->start), philo->id);
 	else if (check == 4 && !philo->data->dead)
 		printf("%ld %d is thinking\n", (ft_time() - philo->data->start), philo->id);
-	else if (check == 5)
-		printf("%ld %d died\n", (ft_time() - philo->data->start), philo->id);
 	pthread_mutex_unlock(&philo->data->c);
 }
 
@@ -116,8 +119,8 @@ int	ft_meal_check(t_ph **philo, t_dt *data)
 void	*ft_monitor_helper(t_dt *data, int i)
 {
 	pthread_mutex_unlock(&data->t);
-	ft_print_mutex(5, data->philo[i]);
 	pthread_mutex_lock(&data->c);
+	printf("%ld %d died\n", (ft_time() - data->start), data->philo[i]->id);
  	data->dead = 1;
 	pthread_mutex_unlock(&data->c);
 	return (pthread_mutex_unlock(&data->t), NULL);
@@ -144,15 +147,7 @@ void	*monitor(void *arg)
 		{
 			pthread_mutex_lock(&data->t);
 			if (data->t_die < ft_time() - data->philo[i]->l_meal)
-			{
-				pthread_mutex_unlock(&data->t);
-				ft_print_mutex(5, data->philo[i]);
-				pthread_mutex_lock(&data->c);
- 				data->dead = 1;
-				pthread_mutex_unlock(&data->c);
-				return (pthread_mutex_unlock(&data->t), NULL);
-				// return (ft_monitor_helper(data, i));
-			}
+				return (ft_monitor_helper(data, i));
 			pthread_mutex_unlock(&data->t);
 			i++;
 		}
@@ -161,7 +156,7 @@ void	*monitor(void *arg)
 	return (NULL);
 }
 
-void	*ft_sleep(long time_to_sleep, t_dt *data)
+int	ft_sleep(long time_to_sleep, t_dt *data)
 {
 	long	begin;
 	
@@ -170,11 +165,11 @@ void	*ft_sleep(long time_to_sleep, t_dt *data)
 	{
 		pthread_mutex_lock(&data->c);
 		if (data->dead)
-			return (pthread_mutex_unlock(&data->c), NULL);
+			return (pthread_mutex_unlock(&data->c), 1);
 		pthread_mutex_unlock(&data->c);
 		usleep(100);
 	}
-	return (NULL);
+	return (0);
 }
 int	ft_routine_check(t_dt *data)
 {
@@ -222,11 +217,13 @@ void	*start_routine(void *arg)
 		if (ft_dead_check(philo, 2) || ft_routine_check(philo->data))
 			return (NULL);
 		ft_print_mutex(2, philo);
-		ft_sleep(philo->data->t_eat, philo->data);
+		if (ft_sleep(philo->data->t_eat, philo->data))
+			return (ft_unlock(philo->left_fork, philo->right_fork), NULL);
 		ft_get_last_meal(philo);
 		ft_unlock(philo->left_fork, philo->right_fork);
 		ft_print_mutex(3, philo);
-		ft_sleep(philo->data->t_sleep, philo->data);
+		if (ft_sleep(philo->data->t_sleep, philo->data))
+			return (NULL);
 		ft_print_mutex(4, philo);
 	}
 	return (NULL);
@@ -256,11 +253,6 @@ void	*one_thread_routine(void *arg)
 		check = 1;
 	}
 	return (NULL);
-}
-
-void	ft_initializer(t_ph *philo)
-{
-	philo->id = 0;
 }
 
 int	ft_mutex_initializer(t_mt **mutex, int num)
