@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:04 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 12:05:12 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 12:11:54 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,37 +288,71 @@ void	ft_free_array(t_ph **philo, int num)
 	philo = NULL;
 }
 
+void	ft_data_initializer(t_dt *data)
+{
+	pthread_mutex_init(&data->p, NULL);
+	pthread_mutex_init(&data->c, NULL);
+	pthread_mutex_init(&data->t, NULL);
+}
+
+t_dt	*ft_alloc_helper(char **argv, int num)
+{
+	t_dt	*data;
+
+	data = malloc(sizeof(t_dt));
+	if (!data)
+		return (NULL);
+	data->start = ft_time();
+	data->t_die = ft_atoi(argv[2]);
+	data->t_eat = ft_atoi(argv[3]);
+	data->t_sleep = ft_atoi(argv[4]);
+	if (argv[5])
+		data->t_num_eat = ft_atoi(argv[5]);
+	else
+		data->t_num_eat = -1;
+	if (data->t_die < 0 || data->t_eat < 0 || data->t_sleep < 0 || data->t_num_eat < -1)
+		return (free(data), NULL);
+	data->dead = 0;
+	data->num = num;
+	data->end_sim = 0;
+	ft_data_initializer(data);
+	return (data);
+	// pthread_mutex_init(&data->p, NULL);
+	// pthread_mutex_init(&data->c, NULL);
+	// pthread_mutex_init(&data->t, NULL);
+}
+
 int	ft_alloc_philo(t_ph **philo, int num, char **argv)
 {
 	int	i;
 	t_dt	*data;
 
 	i = 0;
-	data = malloc(sizeof(t_dt));
-	if (!data)
-		return (1);
-	data->start = ft_time();
-	data->t_die = ft_atoi(argv[2]);
-	if (data->t_die < 0)
-		return (1);
-	data->t_eat = ft_atoi(argv[3]);
-	if (data->t_eat < 0)
-		return (1);
-	data->t_sleep = ft_atoi(argv[4]);
-	if (data->t_sleep < 0)
-		return (1);
-	if (argv[5])
-		data->t_num_eat = ft_atoi(argv[5]);
-	else
-		data->t_num_eat = -1;
-	if (data->t_num_eat < -1)
-		return (1);
-	data->dead = 0;
-	data->num = num;
-	data->end_sim = 0;
-	pthread_mutex_init(&data->p, NULL);
-	pthread_mutex_init(&data->c, NULL);
-	pthread_mutex_init(&data->t, NULL);
+	// data = malloc(sizeof(t_dt));
+	// if (!data)
+	// 	return (1);
+	// data->start = ft_time();
+	// data->t_die = ft_atoi(argv[2]);
+	// if (data->t_die < 0)
+	// 	return (1);
+	// data->t_eat = ft_atoi(argv[3]);
+	// if (data->t_eat < 0)
+	// 	return (1);
+	// data->t_sleep = ft_atoi(argv[4]);
+	// if (data->t_sleep < 0)
+	// 	return (1);
+	// if (argv[5])
+	// 	data->t_num_eat = ft_atoi(argv[5]);
+	// else
+	// 	data->t_num_eat = -1;
+	// if (data->t_num_eat < -1)
+	// 	return (1);
+	// data->dead = 0;
+	// data->num = num;
+	// data->end_sim = 0;
+	// pthread_mutex_init(&data->p, NULL);
+	// pthread_mutex_init(&data->c, NULL);
+	// pthread_mutex_init(&data->t, NULL);
 	while (i < num)
 	{
 		philo[i] = malloc(sizeof(t_ph));
