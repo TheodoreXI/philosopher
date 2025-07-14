@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:53:47 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/07 17:28:21 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/13 18:28:08 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,14 @@ long	ft_atoi(const char *str)
 	{
 		res = res * 10 + (str[i] - 48);
 		if (res / 10 != tmp && sign == 1)
-			return (-1);
+			return (-2);
 		else if (res / 10 != tmp && sign == -1)
-			return (-1);
+			return (-2);
 		tmp = res;
 		i++;
 	}
 	if (res * sign > 2147483647 || res * sign <  -2147483648)
-		return (-1);
+		return (-2);
 	return (res * sign);
 }
 

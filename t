@@ -161159,3 +161159,30 @@ enterd here 1
 enterd here 1
 enterd with 300 and this is diff 301
 901 2 died
+
+./philo  10 200 100 100 0 they eat multiple times
+
+./philo 1 200 100 100  0 deadlock happens
+
+./philo 01  0 60 60
+
+
+
+➜  philo2 git:(master) ✗ ./philo 10  300  60 60  ""
+0 1 has taken a fork
+0 1 has taken a fork
+0 1 is eating
+0 3 has taken a fork
+0 3 has taken a fork
+0 3 is eating
+0 7 has taken a fork
+0 7 has taken a fork
+0 7 is eating
+0 5 has taken a fork
+0 5 has taken a fork
+0 5 is eating
+0 9 has taken a fork
+0 9 has taken a fork
+0 9 is eating
+
+./philo 40 0 0 0 0
