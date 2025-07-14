@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 14:25:54 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 15:06:55 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 16:38:22 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,10 @@ int	ft_multi_philo(t_ph **philo, int num, t_mt **mutex)
 	i = 0;
 	while (i < num)
 	{
-		if (pthread_create(&philo[i]->thread, NULL, start_routine, (void *) philo[i]))
-			return (ft_free_array(philo, num), ft_mutex_destroyer(mutex, num, philo[i]->data), 1);
+		if (pthread_create(&philo[i]->thread, NULL,
+				start_routine, (void *) philo[i]))
+			return (ft_free_array(philo, num),
+				ft_mutex_destroyer(mutex, num, philo[i]->data), 1);
 		i++;
 	}
 	return (0);

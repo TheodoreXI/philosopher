@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 14:26:24 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 15:05:21 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 16:47:48 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int	ft_mutex_initializer(t_mt **mutex, int num, t_dt *data)
 		if (!mutex[i])
 			return (ft_free_mutex(mutex), 1);
 		if (pthread_mutex_init(&mutex[i]->fork, NULL))
-			return (ft_mutex_destroyer(mutex, i, data), ft_free_mutex(mutex), 1);
+			return (ft_mutex_destroyer(mutex, i, data),
+				ft_free_mutex(mutex), 1);
 		i++;
 	}
 	mutex[i] = NULL;
@@ -53,7 +54,8 @@ int	ft_data_initializer(t_dt *data)
 	if (pthread_mutex_init(&data->c, NULL))
 		return (pthread_mutex_destroy(&data->p), 1);
 	if (pthread_mutex_init(&data->t, NULL))
-		return (pthread_mutex_destroy(&data->c), pthread_mutex_destroy(&data->p), 1);
+		return (pthread_mutex_destroy(&data->c),
+			pthread_mutex_destroy(&data->p), 1);
 	return (0);
 }
 
@@ -109,18 +111,3 @@ int	ft_alloc_philo(t_ph **philo, int num, char **argv)
 	data->philo = philo;
 	return (0);
 }
-
-// void	ft_mutex_destroyer(t_mt **mutex, int num, t_dt *data)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (i < num)
-// 	{
-// 		pthread_mutex_destroy(&mutex[i]->fork);
-// 		i++;
-// 	}
-// 	pthread_mutex_destroy(&data->p);
-// 	pthread_mutex_destroy(&data->c);
-// 	pthread_mutex_destroy(&data->t);
-// }

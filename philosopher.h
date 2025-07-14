@@ -6,12 +6,12 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 13:58:15 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 14:41:54 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 16:49:37 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHER_H
-#define PHILOSOPHER_H
+# define PHILOSOPHER_H
 
 # include <unistd.h>
 # include <pthread.h>
@@ -31,15 +31,14 @@ typedef struct s_dt
 	int				num;
 	pthread_mutex_t	p;
 	pthread_mutex_t	c;
-	pthread_mutex_t t;
-	// pthread_mutex_t eat_finish;
+	pthread_mutex_t	t;
 	struct s_ph		**philo;
-} t_dt;
+}	t_dt;
 
 typedef struct s_mt
 {
-	pthread_mutex_t fork;
-} t_mt;
+	pthread_mutex_t	fork;
+}	t_mt;
 
 typedef struct s_ph
 {
@@ -50,8 +49,7 @@ typedef struct s_ph
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	t_dt			*data;
-} t_ph;
-
+}	t_ph;
 
 long	ft_atoi(const char *str);
 int		ft_isdigit(int c);
@@ -81,7 +79,5 @@ void	*ft_monitor_helper(t_dt *data, int i);
 int		ft_meal_check(t_ph **philo, t_dt *data);
 void	ft_get_last_meal(t_ph *philo);
 int		ft_scan_input(t_ph **philo, char **argv, int num, t_mt **mutex);
-
-
 
 #endif

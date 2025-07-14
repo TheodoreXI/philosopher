@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 14:18:55 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 14:19:26 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 16:39:25 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int	check_input(char **argv, int argc)
 	}
 	return (0);
 }
+
 void	ft_print_mutex(int check, t_ph *philo)
 {
 	pthread_mutex_lock(&philo->data->c);
@@ -72,12 +73,16 @@ void	ft_print_mutex(int check, t_ph *philo)
 		return ;
 	}
 	if (check == 1 && !philo->data->dead)
-		printf("%ld %d has taken a fork\n", (ft_time() - philo->data->start), philo->id);
+		printf("%ld %d has taken a fork\n",
+			(ft_time() - philo->data->start), philo->id);
 	else if (check == 2 && !philo->data->dead)
-		printf("%ld %d is eating\n", (ft_time() - philo->data->start), philo->id);
+		printf("%ld %d is eating\n",
+			(ft_time() - philo->data->start), philo->id);
 	else if (check == 3 && !philo->data->dead)
-		printf("%ld %d is sleeping\n", (ft_time() - philo->data->start), philo->id);
+		printf("%ld %d is sleeping\n",
+			(ft_time() - philo->data->start), philo->id);
 	else if (check == 4 && !philo->data->dead)
-		printf("%ld %d is thinking\n", (ft_time() - philo->data->start), philo->id);
+		printf("%ld %d is thinking\n",
+			(ft_time() - philo->data->start), philo->id);
 	pthread_mutex_unlock(&philo->data->c);
 }

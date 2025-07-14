@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 14:24:12 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 14:24:45 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 16:40:13 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ int	ft_dead_check(t_ph *philo, int check)
 	{
 		pthread_mutex_lock(&philo->data->c);
 		if (philo->data->dead)
-			return (ft_unlock(philo->right_fork, philo->left_fork), pthread_mutex_unlock(&philo->data->c), 1);
+			return (ft_unlock(philo->right_fork, philo->left_fork),
+				pthread_mutex_unlock(&philo->data->c), 1);
 		pthread_mutex_unlock(&philo->data->c);
 	}
 	return (0);
@@ -43,7 +44,7 @@ int	ft_dead_check(t_ph *philo, int check)
 void	*start_routine(void *arg)
 {
 	t_ph	*philo;
-	
+
 	philo = (t_ph *)arg;
 	if (philo->id % 2 == 0)
 		usleep((philo->data->t_eat * 1000) / 2);
