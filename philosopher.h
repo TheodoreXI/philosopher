@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 13:58:15 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 16:49:37 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 16:56:53 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,6 @@ void	*ft_monitor_helper(t_dt *data, int i);
 int		ft_meal_check(t_ph **philo, t_dt *data);
 void	ft_get_last_meal(t_ph *philo);
 int		ft_scan_input(t_ph **philo, char **argv, int num, t_mt **mutex);
+void	ft_lock(t_ph *philo);
 
 #endif

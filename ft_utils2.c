@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 14:24:12 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 16:40:13 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 17:52:31 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,16 @@ void	*start_routine(void *arg)
 		usleep((philo->data->t_eat * 1000) / 2);
 	while (!ft_dead_check(philo, 1) && !ft_routine_check(philo->data))
 	{
-		pthread_mutex_lock(philo->left_fork);
-		ft_print_mutex(1, philo);
-		pthread_mutex_lock(philo->right_fork);
+		ft_lock(philo);
 		if (ft_dead_check(philo, 2) || ft_routine_check(philo->data))
 			return (NULL);
 		ft_print_mutex(1, philo);
 		if (ft_dead_check(philo, 2) || ft_routine_check(philo->data))
 			return (NULL);
 		ft_print_mutex(2, philo);
+		ft_get_last_meal(philo);
 		if (ft_sleep(philo->data->t_eat, philo->data))
 			return (ft_unlock(philo->left_fork, philo->right_fork), NULL);
-		ft_get_last_meal(philo);
 		ft_unlock(philo->left_fork, philo->right_fork);
 		ft_print_mutex(3, philo);
 		if (ft_sleep(philo->data->t_sleep, philo->data))

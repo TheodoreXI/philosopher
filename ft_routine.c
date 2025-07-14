@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 14:25:54 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 16:38:22 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 17:01:28 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_m_philo(t_ph **philo, t_mt **mutex)
 	}
 }
 
-int	ft_scan_input_helper(t_ph **philo, int num, t_mt **mutex)
+int	ft_scan_input_helper(t_ph **philo, int num, t_mt **mutex, pthread_t monitor_thread)
 {
 	int	i;
 
@@ -43,6 +43,7 @@ int	ft_scan_input_helper(t_ph **philo, int num, t_mt **mutex)
 		pthread_join(philo[i]->thread, NULL);
 		i++;
 	}
+	pthread_join(monitor_thread, NULL);
 	ft_mutex_destroyer(mutex, num, philo[0]->data);
 	return (1);
 }
@@ -94,7 +95,7 @@ int	ft_scan_input(t_ph **philo, char **argv, int num, t_mt **mutex)
 			return (1);
 	}
 	if (pthread_create(&monitor_thread, NULL, monitor, (void *) philo[0]->data))
-		return (ft_scan_input_helper(philo, num, mutex));
-	ft_scan_input_helper(philo, num, mutex);
+		return (ft_scan_input_helper(philo, num, mutex, monitor_thread));
+	ft_scan_input_helper(philo, num, mutex, monitor_thread);
 	return (ft_free_mutex(mutex), ft_free_array(philo, num), 0);
 }

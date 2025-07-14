@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 14:26:24 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 16:47:48 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 17:11:32 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ void	ft_free_array(t_ph **philo, int num)
 	int	i;
 
 	i = 0;
+	if (!philo[0] || !philo[0]->data)
+	{
+		free (philo);
+		return ;
+	}
 	free(philo[i]->data);
 	while (i < num)
 	{
