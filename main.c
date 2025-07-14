@@ -6,81 +6,81 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:04 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 12:11:54 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 14:19:20 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philosopher.h>
 
-long	ft_time(void)
-{
-	struct timeval	time;
+// long	ft_time(void)
+// {
+// 	struct timeval	time;
 
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
-}
+// 	gettimeofday(&time, NULL);
+// 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+// }
 
-void	ft_unlock(pthread_mutex_t *thread1, pthread_mutex_t *thread2)
-{
-	pthread_mutex_unlock(thread1);
-	pthread_mutex_unlock(thread2);
-}
+// void	ft_unlock(pthread_mutex_t *thread1, pthread_mutex_t *thread2)
+// {
+// 	pthread_mutex_unlock(thread1);
+// 	pthread_mutex_unlock(thread2);
+// }
 
-int	check_empty(char *str)
-{
-	int	i;
+// int	check_empty(char *str)
+// {
+// 	int	i;
 
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] != 32 && str[i] != 9)
-			return (0);
-		i++;
-	}
-	return (1);
-}
+// 	i = 0;
+// 	while (str[i])
+// 	{
+// 		if (str[i] != 32 && str[i] != 9)
+// 			return (0);
+// 		i++;
+// 	}
+// 	return (1);
+// }
 
-int	check_input(char **argv, int argc)
-{
-	int	i;
-	int	j;
+// int	check_input(char **argv, int argc)
+// {
+// 	int	i;
+// 	int	j;
 
-	i = 1;
-	if (argc > 6 || argc < 5)
-		return (1);
-	while (argv[i])
-	{
-		j = 0;
-		if (check_empty(argv[i]))
-			return (1);
-		while (argv[i][j])
-		{
-			if (!ft_isdigit(argv[i][j]))
-				return (1);
-			j++;
-		}
-		i++;
-	}
-	return (0);
-}
-void	ft_print_mutex(int check, t_ph *philo)
-{
-	pthread_mutex_lock(&philo->data->c);
-	if (philo->data->dead)
-	{
-		pthread_mutex_unlock(&philo->data->c);
-		return ;
-	}
-	if (check == 1 && !philo->data->dead)
-		printf("%ld %d has taken a fork\n", (ft_time() - philo->data->start), philo->id);
-	else if (check == 2 && !philo->data->dead)
-		printf("%ld %d is eating\n", (ft_time() - philo->data->start), philo->id);
-	else if (check == 3 && !philo->data->dead)
-		printf("%ld %d is sleeping\n", (ft_time() - philo->data->start), philo->id);
-	else if (check == 4 && !philo->data->dead)
-		printf("%ld %d is thinking\n", (ft_time() - philo->data->start), philo->id);
-	pthread_mutex_unlock(&philo->data->c);
-}
+// 	i = 1;
+// 	if (argc > 6 || argc < 5)
+// 		return (1);
+// 	while (argv[i])
+// 	{
+// 		j = 0;
+// 		if (check_empty(argv[i]))
+// 			return (1);
+// 		while (argv[i][j])
+// 		{
+// 			if (!ft_isdigit(argv[i][j]))
+// 				return (1);
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// 	return (0);
+// }
+// void	ft_print_mutex(int check, t_ph *philo)
+// {
+// 	pthread_mutex_lock(&philo->data->c);
+// 	if (philo->data->dead)
+// 	{
+// 		pthread_mutex_unlock(&philo->data->c);
+// 		return ;
+// 	}
+// 	if (check == 1 && !philo->data->dead)
+// 		printf("%ld %d has taken a fork\n", (ft_time() - philo->data->start), philo->id);
+// 	else if (check == 2 && !philo->data->dead)
+// 		printf("%ld %d is eating\n", (ft_time() - philo->data->start), philo->id);
+// 	else if (check == 3 && !philo->data->dead)
+// 		printf("%ld %d is sleeping\n", (ft_time() - philo->data->start), philo->id);
+// 	else if (check == 4 && !philo->data->dead)
+// 		printf("%ld %d is thinking\n", (ft_time() - philo->data->start), philo->id);
+// 	pthread_mutex_unlock(&philo->data->c);
+// }
 
 
 void	ft_get_last_meal(t_ph *philo)
@@ -255,7 +255,22 @@ void	*one_thread_routine(void *arg)
 	return (NULL);
 }
 
-int	ft_mutex_initializer(t_mt **mutex, int num)
+void	ft_free_mutex(t_mt **mutex)
+{
+	int	i;
+
+	i = 0;
+	while (mutex[i])
+	{
+		free (mutex[i]);
+		mutex[i] = NULL;
+		i++;
+	}
+	free (mutex);
+	mutex = NULL;
+}
+
+int	ft_mutex_initializer(t_mt **mutex, int num, t_dt *data)
 {
 	int	i;
 
@@ -264,9 +279,9 @@ int	ft_mutex_initializer(t_mt **mutex, int num)
 	{
 		mutex[i] = malloc(sizeof(t_mt));
 		if (!mutex[i])
-			return (1);
+			return (ft_free_mutex(mutex), 1);
 		if (pthread_mutex_init(&mutex[i]->fork, NULL))
-			return (1);
+			return (ft_mutex_destroyer(mutex, i, data), ft_free_mutex(mutex), 1);
 		i++;
 	}
 	mutex[i] = NULL;
@@ -278,6 +293,7 @@ void	ft_free_array(t_ph **philo, int num)
 	int	i;
 
 	i = 0;
+	free(philo[i]->data);
 	while (i < num)
 	{
 		free (philo[i]);
@@ -288,11 +304,15 @@ void	ft_free_array(t_ph **philo, int num)
 	philo = NULL;
 }
 
-void	ft_data_initializer(t_dt *data)
+int	ft_data_initializer(t_dt *data)
 {
-	pthread_mutex_init(&data->p, NULL);
-	pthread_mutex_init(&data->c, NULL);
-	pthread_mutex_init(&data->t, NULL);
+	if (pthread_mutex_init(&data->p, NULL))
+		return (1);
+	if (pthread_mutex_init(&data->c, NULL))
+		return (pthread_mutex_destroy(&data->p), 1);
+	if (pthread_mutex_init(&data->t, NULL))
+		return (pthread_mutex_destroy(&data->c), pthread_mutex_destroy(&data->p), 1);
+	return (0);
 }
 
 t_dt	*ft_alloc_helper(char **argv, int num)
@@ -315,11 +335,9 @@ t_dt	*ft_alloc_helper(char **argv, int num)
 	data->dead = 0;
 	data->num = num;
 	data->end_sim = 0;
-	ft_data_initializer(data);
+	if (ft_data_initializer(data))
+		return (free(data), NULL);
 	return (data);
-	// pthread_mutex_init(&data->p, NULL);
-	// pthread_mutex_init(&data->c, NULL);
-	// pthread_mutex_init(&data->t, NULL);
 }
 
 int	ft_alloc_philo(t_ph **philo, int num, char **argv)
@@ -328,31 +346,9 @@ int	ft_alloc_philo(t_ph **philo, int num, char **argv)
 	t_dt	*data;
 
 	i = 0;
-	// data = malloc(sizeof(t_dt));
-	// if (!data)
-	// 	return (1);
-	// data->start = ft_time();
-	// data->t_die = ft_atoi(argv[2]);
-	// if (data->t_die < 0)
-	// 	return (1);
-	// data->t_eat = ft_atoi(argv[3]);
-	// if (data->t_eat < 0)
-	// 	return (1);
-	// data->t_sleep = ft_atoi(argv[4]);
-	// if (data->t_sleep < 0)
-	// 	return (1);
-	// if (argv[5])
-	// 	data->t_num_eat = ft_atoi(argv[5]);
-	// else
-	// 	data->t_num_eat = -1;
-	// if (data->t_num_eat < -1)
-	// 	return (1);
-	// data->dead = 0;
-	// data->num = num;
-	// data->end_sim = 0;
-	// pthread_mutex_init(&data->p, NULL);
-	// pthread_mutex_init(&data->c, NULL);
-	// pthread_mutex_init(&data->t, NULL);
+	data = ft_alloc_helper(argv, num);
+	if (!data)
+		return (1);
 	while (i < num)
 	{
 		philo[i] = malloc(sizeof(t_ph));
@@ -371,7 +367,7 @@ int	ft_alloc_philo(t_ph **philo, int num, char **argv)
 	return (0);
 }
 
-void	ft_mlx_destroyer(t_mt **mutex, int num, t_dt *data)
+void	ft_mutex_destroyer(t_mt **mutex, int num, t_dt *data)
 {
 	int	i;
 
@@ -415,24 +411,35 @@ int	ft_scan_input(t_ph **philo, char **argv, int num, t_mt **mutex)
 	i = 0;
 	if (ft_alloc_philo(philo, num, argv))
 		return (ft_free_array(philo, num), 1);
-	if (ft_mutex_initializer(mutex, num))
-		return (ft_mlx_destroyer(mutex, num, philo[i]->data), 1);
+	if (ft_mutex_initializer(mutex, num, philo[0]->data))
+		return (ft_free_array(philo, num), ft_mutex_destroyer(mutex, num, philo[i]->data), 1);
 	ft_m_philo(philo, mutex);
 	if (num <= 1)
 	{
 		if (pthread_create(&philo[i]->thread, NULL, one_thread_routine, (void *) philo[i]))
-			return (1);
+			return (ft_free_array(philo, num), ft_mutex_destroyer(mutex, num, philo[i]->data), ft_free_mutex(mutex), 1);
 	}
 	else
 	{
 		while (i < num)
 		{
 			if (pthread_create(&philo[i]->thread, NULL, start_routine, (void *) philo[i]))
-				return (1);
+				return (ft_free_array(philo, num), ft_mutex_destroyer(mutex, num, philo[i]->data), 1);
 			i++;
 		}
 	}
-	pthread_create(&monitor_thread, NULL, monitor, (void *) philo[0]->data);
+	if (pthread_create(&monitor_thread, NULL, monitor, (void *) philo[0]->data))
+	{
+		i = 0;
+		while (i < num)
+		{
+			pthread_join(philo[i]->thread, NULL);
+			i++;
+		}
+		ft_mutex_destroyer(mutex, num, philo[0]->data);
+		return (1);
+	}
+	// pthread_create(&monitor_thread, NULL, monitor, (void *) philo[0]->data);
 	i = 0;
 	while (i < num)
 	{
@@ -440,11 +447,12 @@ int	ft_scan_input(t_ph **philo, char **argv, int num, t_mt **mutex)
 		i++;
 	}
 	pthread_join(monitor_thread, NULL);
-	ft_mlx_destroyer(mutex, num, philo[0]->data);
+	ft_mutex_destroyer(mutex, num, philo[0]->data);
+	ft_free_mutex(mutex);
+	ft_free_array(philo, num);
 	return (0);
 	// join the thread and then destroy the mutx
 }
-
 
 int	main(int argc, char **argv)
 {
