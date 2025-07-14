@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 13:58:15 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 14:21:24 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 14:41:54 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,25 @@ void	ft_unlock(pthread_mutex_t *thread1, pthread_mutex_t *thread2);
 int		check_empty(char *str);
 int		check_input(char **argv, int argc);
 void	ft_print_mutex(int check, t_ph *philo);
+int		ft_routine_check(t_dt *data);
+int		ft_dead_check(t_ph *philo, int check);
+void	*start_routine(void *arg);
+void	*one_thread_routine(void *arg);
+void	ft_free_mutex(t_mt **mutex);
+int		ft_mutex_initializer(t_mt **mutex, int num, t_dt *data);
+void	ft_free_array(t_ph **philo, int num);
+int		ft_data_initializer(t_dt *data);
+t_dt	*ft_alloc_helper(char **argv, int num);
+int		ft_alloc_philo(t_ph **philo, int num, char **argv);
+void	ft_mutex_destroyer(t_mt **mutex, int num, t_dt *data);
+void	ft_m_philo(t_ph **philo, t_mt **mutex);
+int		ft_sleep(long time_to_sleep, t_dt *data);
+void	*monitor(void *arg);
+void	*ft_monitor_helper(t_dt *data, int i);
+int		ft_meal_check(t_ph **philo, t_dt *data);
+void	ft_get_last_meal(t_ph *philo);
+int		ft_scan_input(t_ph **philo, char **argv, int num, t_mt **mutex);
+
+
 
 #endif

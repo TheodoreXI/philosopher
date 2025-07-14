@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:53:47 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/13 18:28:08 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/14 15:05:35 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,31 +44,6 @@ static int	ft_space(const char **str, int sign)
 	}
 	return (sign);
 }
-
-// int	ft_atoi(const char *str)
-// {
-// 	int				i;
-// 	int				sign;
-// 	int				res;
-// 	int				tmp;
-
-// 	sign = 1;
-// 	i = 0;
-// 	res = 0;
-// 	tmp = 0;
-// 	sign = ft_space(&str, sign);
-// 	while (str[i] >= '0' && str[i] <= '9')
-// 	{
-// 		res = res * 10 + (str[i] - 48);
-// 		if (res / 10 != tmp && sign == 1)
-// 			return (-1);
-// 		else if (res / 10 != tmp && sign == -1)
-// 			return (-1);
-// 		tmp = res;
-// 		i++;
-// 	}
-// 	return ((int)res * sign);
-// }
 
 long	ft_atoi(const char *str)
 {
