@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 13:58:15 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 16:56:53 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/15 10:02:24 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void	ft_free_array(t_ph **philo, int num);
 int		ft_data_initializer(t_dt *data);
 t_dt	*ft_alloc_helper(char **argv, int num);
 int		ft_alloc_philo(t_ph **philo, int num, char **argv);
-void	ft_mutex_destroyer(t_mt **mutex, int num, t_dt *data);
 void	ft_m_philo(t_ph **philo, t_mt **mutex);
 int		ft_sleep(long time_to_sleep, t_dt *data);
 void	*monitor(void *arg);

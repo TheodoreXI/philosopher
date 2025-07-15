@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 14:25:54 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 17:01:28 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/15 10:02:55 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	ft_m_philo(t_ph **philo, t_mt **mutex)
 	}
 }
 
-int	ft_scan_input_helper(t_ph **philo, int num, t_mt **mutex, pthread_t monitor_thread)
+int	ft_scan_input_helper(t_ph **philo, int num,
+						t_mt **mutex, pthread_t monitor_thread)
 {
 	int	i;
 
