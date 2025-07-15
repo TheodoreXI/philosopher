@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 14:18:55 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/14 17:33:47 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/15 14:11:23 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,29 @@ int	check_input(char **argv, int argc)
 	return (0);
 }
 
-void	ft_print_mutex(int check, t_ph *philo)
+int	ft_check_print(t_ph *philo)
 {
-	pthread_mutex_lock(&philo->data->c);
 	if (philo->data->dead)
 	{
 		pthread_mutex_unlock(&philo->data->c);
-		return ;
+		return (1);
 	}
+	pthread_mutex_lock(&philo->data->t);
+	if (philo->data->end_sim)
+	{
+		pthread_mutex_unlock(&philo->data->t);
+		pthread_mutex_unlock(&philo->data->c);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->data->t);
+	return (0);
+}
+
+void	ft_print_mutex(int check, t_ph *philo)
+{
+	pthread_mutex_lock(&philo->data->c);
+	if (ft_check_print(philo))
+		return ;
 	if (check == 1 && !philo->data->dead)
 		printf("%ld %d has taken a fork\n",
 			(ft_time() - philo->data->start), philo->id);
