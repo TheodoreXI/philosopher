@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:04 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/15 14:02:17 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/17 11:37:52 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ int	main(int argc, char **argv)
 		return (1);
 	mutex = malloc(sizeof(t_mt *) * (num + 1));
 	if (!mutex)
-		return (1);
+		return (free(num_philo), 1);
 	ft_scan_input(num_philo, argv, num, mutex);
 }

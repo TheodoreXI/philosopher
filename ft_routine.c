@@ -6,7 +6,7 @@
 /*   By: aakroud <aakroud@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 14:25:54 by aakroud           #+#    #+#             */
-/*   Updated: 2025/07/15 10:02:55 by aakroud          ###   ########.fr       */
+/*   Updated: 2025/07/17 11:37:26 by aakroud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,17 @@ int	ft_scan_input_helper(t_ph **philo, int num,
 	return (1);
 }
 
-int	ft_one_philo(t_ph **philo, int num, t_mt **mutex)
+int	ft_one_philo(t_ph **philo, int num, t_mt **mutex, t_dt *data_clone)
 {
 	if (pthread_create(&philo[0]->thread, NULL,
 			one_thread_routine, (void *) philo[0]))
 		return (ft_free_array(philo, num),
-			ft_mutex_destroyer(mutex, num, philo[0]->data),
+			ft_mutex_destroyer(mutex, num, data_clone),
 			ft_free_mutex(mutex), 1);
 	return (0);
 }
 
-int	ft_multi_philo(t_ph **philo, int num, t_mt **mutex)
+int	ft_multi_philo(t_ph **philo, int num, t_mt **mutex, t_dt *data_clone)
 {
 	int	i;
 
@@ -69,7 +69,7 @@ int	ft_multi_philo(t_ph **philo, int num, t_mt **mutex)
 		if (pthread_create(&philo[i]->thread, NULL,
 				start_routine, (void *) philo[i]))
 			return (ft_free_array(philo, num),
-				ft_mutex_destroyer(mutex, num, philo[i]->data), 1);
+				ft_mutex_destroyer(mutex, num, data_clone), ft_free_mutex(mutex), 1);
 		i++;
 	}
 	return (0);
@@ -79,24 +79,25 @@ int	ft_scan_input(t_ph **philo, char **argv, int num, t_mt **mutex)
 {
 	pthread_t	monitor_thread;
 
+	monitor_thread = NULL;
 	if (ft_alloc_philo(philo, num, argv))
 		return (ft_free_array(philo, num), 1);
 	if (ft_mutex_initializer(mutex, num, philo[0]->data))
-		return (ft_free_array(philo, num),
-			ft_mutex_destroyer(mutex, num, philo[0]->data), 1);
+		return (ft_free_array(philo, num), 1);
 	ft_m_philo(philo, mutex);
 	if (num <= 1)
 	{
-		if (ft_one_philo(philo, num, mutex))
+		if (ft_one_philo(philo, num, mutex, philo[0]->data))
 			return (1);
 	}
 	else
 	{
-		if (ft_multi_philo(philo, num, mutex))
+		if (ft_multi_philo(philo, num, mutex, philo[0]->data))
 			return (1);
 	}
 	if (pthread_create(&monitor_thread, NULL, monitor, (void *) philo[0]->data))
-		return (ft_scan_input_helper(philo, num, mutex, monitor_thread));
+		return (ft_scan_input_helper(philo, num, mutex, monitor_thread), ft_mutex_destroyer(mutex, num, philo[0]->data),
+				ft_free_mutex(mutex), ft_free_array(philo, num), 1);
 	ft_scan_input_helper(philo, num, mutex, monitor_thread);
 	return (ft_free_mutex(mutex), ft_free_array(philo, num), 0);
 }
